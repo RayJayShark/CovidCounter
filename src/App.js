@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import Counter from './components/Counter'
 import covidService from './services/covidapi'
+import CounterTable from "./components/CounterTable";
 
 const EUCountries = ["AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "EL", "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES", "SE"];
 
@@ -43,8 +44,7 @@ function App() {
 
     return (
     <div className="App">
-      <Counter country={"US"} covid={covidUS}/>
-      <Counter country={"EU"} covid={covidEU}/>
+      <CounterTable data={[{country: "US", covidData: covidUS}, {country: "EU", covidData: covidEU}]} />
     </div>
   );
 }

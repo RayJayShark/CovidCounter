@@ -7,14 +7,27 @@ const formatNumber = (number) => {
 const Counter = ({country, covid}) => {
 
     return (
-        <div>
-            <h3>{country}:</h3>
-            <ul>
-                <li>Cases: {formatNumber(covid.cases)}</li>
-                <li>Deaths: {formatNumber(covid.deaths)}</li>
-                <li>Total Population: {formatNumber(covid.population)}</li>
-            </ul>
-        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th colSpan="2" >{country}:</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Cases:</td>
+                    <td>{formatNumber(covid.cases)}</td>
+                </tr>
+                <tr>
+                    <td>Deaths:</td>
+                    <td>{formatNumber(covid.deaths)}</td>
+                </tr>
+                <tr>
+                    <td>Total Population:</td>
+                    <td>{formatNumber(covid.population)}</td>
+                </tr>
+            </tbody>
+        </table>
     );
 }
 
