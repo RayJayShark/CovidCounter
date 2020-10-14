@@ -5,7 +5,7 @@ const CounterTable = ({data}) => {
 
     return (
         <div>
-            <table>
+            <table style={{marginLeft: "auto", marginRight: "auto"}}>
                 <tbody>
                     <tr>
                         {data.map(item => <td key={item.country} ><Counter country={item.country} covid={item.covidData} /> </td>)}

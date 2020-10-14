@@ -44,7 +44,7 @@ function App() {
 
     return (
     <div className="App">
-      <CounterTable data={[{country: "US", covidData: covidUS}, {country: "EU", covidData: covidEU}]} />
+        <CounterTable data={[{country: "US", covidData: covidUS}, {country: "EU", covidData: covidEU}]} />
     </div>
   );
 }

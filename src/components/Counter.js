@@ -7,7 +7,7 @@ const formatNumber = (number) => {
 const Counter = ({country, covid}) => {
 
     return (
-        <table>
+        <table style={{border: "1px solid"}}>
             <thead>
                 <tr>
                     <th colSpan="2" >{country}:</th>
