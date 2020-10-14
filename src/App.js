@@ -1,7 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import logo from './logo.svg';
 import './App.css';
-import Counter from './components/Counter'
 import covidService from './services/covidapi'
 import CounterTable from "./components/CounterTable";
 
