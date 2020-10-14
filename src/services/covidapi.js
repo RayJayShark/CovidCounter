@@ -1,9 +1,10 @@
 import axios from 'axios'
 
-const EcdcApi = "https://cors-anywhere.herokuapp.com/https://opendata.ecdc.europa.eu/covid19/casedistribution/json";
+const proxy = "https://cors-anywhere.herokuapp.com/"        // Proxy for 'Access-Control-Allow-Origin' error
+const EcdcApi = "https://opendata.ecdc.europa.eu/covid19/casedistribution/json";
 
 const getData = () => {
-    const request = axios.get(EcdcApi);
+    const request = axios.get(proxy + EcdcApi);
     return request.then(response => response.data.records);
 }
 
