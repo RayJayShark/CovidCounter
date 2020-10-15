@@ -21,22 +21,9 @@ const CounterTable = ({data, extend}) => {
     for (let item of data) {
         if (item.geoId === "US") {
             const total = dataUS[0];
-            const countryObj = dataUS.find(i => i.name === item.geoId);
-            if (countryObj){
-                countryObj.cases += item.cases;
-                countryObj.deaths += item.deaths;
-            }
-            else {
-                dataUS.push({
-                    name: item.geoId,
-                    cases: item.cases,
-                    deaths: item.deaths,
-                    population: item.popData2019
-                });
-                total.population += item.popData2019;
-            }
             total.cases += item.cases;
             total.deaths += item.deaths;
+            total.population = item.popData2019; // Temp to get population of US
         }
         else if (EUCountries.includes(item.geoId)) {
             const total = dataEU[0];

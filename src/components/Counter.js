@@ -9,7 +9,7 @@ const Counter = ({data, extend}) => {
 
 
     return (
-        <table class="counter">
+        <table className="counter">
             { extend ?
                 data.map(country =>
                     <tbody>
@@ -42,7 +42,7 @@ const Counter = ({data, extend}) => {
                     <td>Deaths:</td>
                     <td>{formatNumber(data[0].deaths)}</td>
                 </tr>
-                <tr class="bottom">
+                <tr className="bottom">
                     <td>Total Population:</td>
                     <td>{formatNumber(data[0].population)}</td>
                 </tr>
