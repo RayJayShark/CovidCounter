@@ -5,6 +5,7 @@ import CounterTable from "./components/CounterTable";
 
 function App() {
     const [ covidData, setCovidData ] = useState([]);
+    const [ extend, setExtend ] = useState(false);
 
     useEffect (() => {
         covidService.getData().then(data => {
@@ -14,7 +15,8 @@ function App() {
 
     return (
     <div className="App">
-        <CounterTable data={covidData}/>
+        <button onClick={() => setExtend(!extend)}>{ extend ? "Hide" : "Extend" }</button>
+        <CounterTable data={covidData} extend={extend} />
     </div>
   );
 }

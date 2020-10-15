@@ -3,16 +3,16 @@ import Counter from './Counter'
 
 const EUCountries = ["AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "EL", "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES", "SE"];
 
-const CounterTable = ({data}) => {
-    
+const CounterTable = ({data, extend}) => {
+
     const dataUS = [{
-        country: "total",
+        name: "US",
         cases: 0,
         deaths: 0,
         population: 0
     }];
     const dataEU = [{
-        country: "total",
+        name: "EU",
         cases: 0,
         deaths: 0,
         population: 0
@@ -21,14 +21,14 @@ const CounterTable = ({data}) => {
     for (let item of data) {
         if (item.geoId === "US") {
             const total = dataUS[0];
-            const countryObj = dataUS.find(i => i.country === item.geoId);
+            const countryObj = dataUS.find(i => i.name === item.geoId);
             if (countryObj){
                 countryObj.cases += item.cases;
                 countryObj.deaths += item.deaths;
             }
             else {
                 dataUS.push({
-                    country: item.geoId,
+                    name: item.geoId,
                     cases: item.cases,
                     deaths: item.deaths,
                     population: item.popData2019
@@ -40,14 +40,15 @@ const CounterTable = ({data}) => {
         }
         else if (EUCountries.includes(item.geoId)) {
             const total = dataEU[0];
-            const countryObj = dataEU.find(i => i.country === item.geoId);
+            const countryObj = dataEU.find(i => i.geoId === item.geoId);
             if (countryObj){
                 countryObj.cases += item.cases;
                 countryObj.deaths += item.deaths;
             }
             else {
                 dataEU.push({
-                    country: item.geoId,
+                    name: item.countriesAndTerritories,
+                    geoId: item.geoId,
                     cases: item.cases,
                     deaths: item.deaths,
                     population: item.popData2019
@@ -64,8 +65,8 @@ const CounterTable = ({data}) => {
             <table style={{marginLeft: "auto", marginRight: "auto"}}>
                 <tbody>
                     <tr>
-                        <td><Counter region={"US"} data={dataUS} /></td>
-                        <td><Counter region={"EU"} data={dataEU} /></td>
+                        <td style={{verticalAlign: "top"}}><Counter data={dataUS} extend={extend} /></td>
+                        <td style={{verticalAlign: "top"}}><Counter data={dataEU} extend={extend} /></td>
                     </tr>
                 </tbody>
             </table>
