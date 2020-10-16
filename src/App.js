@@ -15,8 +15,14 @@ function App() {
 
     return (
     <div className="App">
-        <button onClick={() => setExtend(!extend)}>{ extend ? "Hide" : "Extend" }</button>
-        <CounterTable data={covidData} extend={extend} />
+        {covidData.length === 0 ?
+            <div>Loading...</div>
+            :
+            <div>
+                <button onClick={() => setExtend(!extend)}>{extend ? "Hide" : "Extend"}</button>
+                <CounterTable data={covidData} extend={extend} />
+            </div>
+        }
     </div>
   );
 }
