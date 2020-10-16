@@ -24,7 +24,7 @@ const Counter = ({data, extend}) => {
                             <td>Deaths:</td>
                             <td>{formatNumber(country.deaths)}</td>
                         </tr>
-                        <tr class="bottom">
+                        <tr className="bottom">
                             <td>Total Population:</td>
                             <td>{formatNumber(country.population)}</td>
                         </tr>
