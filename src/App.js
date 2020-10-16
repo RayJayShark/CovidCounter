@@ -8,7 +8,7 @@ function App() {
     const [ extend, setExtend ] = useState(false);
 
     useEffect (() => {
-        covidService.getData().then(data => {
+        covidService.getEuropeData().then(data => {
             setCovidData(data);
         });
     }, []);
