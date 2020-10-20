@@ -33,7 +33,7 @@ const getAmericaData = async () => {
                 continue;
             }
             const popObj = pops.find(i => i[1] === fullName);
-            item.Population = popObj[0];
+            item.population = popObj[0];
         }
         data = data.filter(item => !badStates.includes(item.state))
         return data;
