@@ -25,13 +25,17 @@ const getAmericaData = async () => {
     const dataRequest = axios.get(CdcApi + `?submission_date=${latestDate.getFullYear()}-${latestDate.getMonth() + 1}-${latestDate.getDate()}`);
     return dataRequest.then(response => {
         let data = response.data;
+        let badStates = [];
         for (let item of data) {
             const fullName = US[item.state];
-            const popObj = pops.find(i => i[1] === fullName);
-            if (!popObj)
+            if (!fullName) {
+                badStates.push(item.state);
                 continue;
+            }
+            const popObj = pops.find(i => i[1] === fullName);
             item.Population = popObj[0];
         }
+        data = data.filter(item => !badStates.includes(item.state))
         return data;
     });
 }
