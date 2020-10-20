@@ -1,7 +1,6 @@
 import React from 'react';
 import Counter from './Counter'
-
-const EUCountries = ["AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "EL", "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES", "SE"];
+import {EU} from '../assets/countries.json'
 
 const CounterTable = ({data, extend}) => {
 
@@ -25,7 +24,7 @@ const CounterTable = ({data, extend}) => {
             total.deaths += item.deaths;
             total.population = item.popData2019; // Temp to get population of US
         }
-        else if (EUCountries.includes(item.geoId)) {
+        else if (EU.includes(item.geoId)) {
             const total = dataEU[0];
             const countryObj = dataEU.find(i => i.geoId === item.geoId);
             if (countryObj){
