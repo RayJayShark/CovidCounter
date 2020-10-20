@@ -4,23 +4,27 @@ import covidService from './services/covidapi'
 import CounterTable from "./components/CounterTable";
 
 function App() {
-    const [ covidData, setCovidData ] = useState([]);
+    const [ americaData, setAmericaData ] = useState([]);
+    const [ europeData, setEuropeData ] = useState([]);
     const [ extend, setExtend ] = useState(false);
 
     useEffect (() => {
         covidService.getEuropeData().then(data => {
-            setCovidData(data);
+            setEuropeData(data);
+        });
+        covidService.getAmericaData().then(data =>{
+            setAmericaData(data);
         });
     }, []);
 
     return (
     <div className="App">
-        {covidData.length === 0 ?
+        {europeData.length === 0 || americaData.length === 0 ?
             <div>Loading...</div>
             :
             <div>
                 <button onClick={() => setExtend(!extend)}>{extend ? "Hide" : "Extend"}</button>
-                <CounterTable data={covidData} extend={extend} />
+                <CounterTable europeData={europeData} americaData={americaData} extend={extend} />
             </div>
         }
     </div>
