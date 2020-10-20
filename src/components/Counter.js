@@ -12,7 +12,7 @@ const Counter = ({data, extend}) => {
         <table className="counter">
             { extend ?
                 data.map(country =>
-                    <tbody>
+                    <tbody key={country.name}>
                         <tr>
                             <th colSpan="2">{country.name}:</th>
                         </tr>
