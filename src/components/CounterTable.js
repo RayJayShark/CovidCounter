@@ -54,11 +54,13 @@ const CounterTable = ({americaData, europeData, extend}) => {
 
     return (
         <div>
-            <table style={{marginLeft: "auto", marginRight: "auto"}}>
+            <table>
                 <tbody>
                     <tr>
-                        <td style={{verticalAlign: "top"}}><Counter data={dataUS} extend={extend} /></td>
                         <td style={{verticalAlign: "top"}}><Counter data={dataEU} extend={extend} /></td>
+                    </tr>
+                    <tr>
+                        <td style={{verticalAlign: "top"}}><Counter data={dataUS} extend={extend} /></td>
                     </tr>
                 </tbody>
             </table>

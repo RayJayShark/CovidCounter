@@ -11,41 +11,36 @@ const Counter = ({data, extend}) => {
     return (
         <table className="counter">
             { extend ?
-                data.map(country =>
-                    <tbody key={country.name}>
-                        <tr>
-                            <th colSpan="2">{country.name}:</th>
-                        </tr>
-                        <tr>
-                            <td>Cases:</td>
+                <tbody>
+                    <tr>
+                        <td>Area:</td>
+                        <td>Cases:</td>
+                        <td>Deaths:</td>
+                        <td>Total Population:</td>
+                    </tr>
+                    {data.map(country =>
+                        <tr key={country.name}>
+                            <th>{country.name}:</th>
                             <td>{formatNumber(country.cases)}</td>
-                        </tr>
-                        <tr>
-                            <td>Deaths:</td>
                             <td>{formatNumber(country.deaths)}</td>
-                        </tr>
-                        <tr className="bottom">
-                            <td>Total Population:</td>
                             <td>{formatNumber(country.population)}</td>
                         </tr>
-                    </tbody>)
+                    )}
+                </tbody>
                 :
                 <tbody>
-                <tr>
-                    <th colSpan="2">{data[0].name}:</th>
-                </tr>
-                <tr>
-                    <td>Cases:</td>
-                    <td>{formatNumber(data[0].cases)}</td>
-                </tr>
-                <tr>
-                    <td>Deaths:</td>
-                    <td>{formatNumber(data[0].deaths)}</td>
-                </tr>
-                <tr className="bottom">
-                    <td>Total Population:</td>
-                    <td>{formatNumber(data[0].population)}</td>
-                </tr>
+                    <tr>
+                        <td>Area:</td>
+                        <td>Cases:</td>
+                        <td>Deaths:</td>
+                        <td>Total Population:</td>
+                    </tr>
+                    <tr>
+                        <th>{data[0].name}:</th>
+                        <td>{formatNumber(data[0].cases)}</td>
+                        <td>{formatNumber(data[0].deaths)}</td>
+                        <td>{formatNumber(data[0].population)}</td>
+                    </tr>
                 </tbody>
             }
         </table>

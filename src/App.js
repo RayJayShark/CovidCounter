@@ -18,7 +18,7 @@ function App() {
     }, []);
 
     return (
-    <div className="App">
+    <div>
         {europeData.length === 0 || americaData.length === 0 ?
             <div>Loading...</div>
             :
