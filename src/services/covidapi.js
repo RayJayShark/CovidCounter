@@ -1,14 +1,46 @@
 import axios from 'axios'
-import {US} from '../assets/countries.json'
+import {EU, US} from '../assets/countries.json'
 
 const proxy = "https://cors-anywhere.herokuapp.com/";        // Proxy for 'Access-Control-Allow-Origin' error
 const EcdcApi = "https://opendata.ecdc.europa.eu/covid19/casedistribution/json";
 const CdcApi = "https://data.cdc.gov/resource/9mfq-cb36.json";
 const CensusApi = "https://api.census.gov/data/2010/dec/sf1?get=P001001,NAME&for=state";
 
-const getEuropeData = () => {
+const getEuropeData = async () => {
     const request = axios.get(proxy + EcdcApi);
-    return request.then(response => response.data.records);
+    let preData = [];
+    await request.then(response => preData = response.data.records);
+
+    const formattedData = [{
+        name: "EU",
+        cases: 0,
+        deaths: 0,
+        population: 0
+    }];
+    for (let item of preData) {
+        if (EU.includes(item.geoId)) {
+            const total = formattedData[0];
+            const countryObj = formattedData.find(i => i.geoId === item.geoId);
+            if (countryObj){
+                countryObj.cases += item.cases;
+                countryObj.deaths += item.deaths;
+            }
+            else {
+                formattedData.push({
+                    name: item.countriesAndTerritories,
+                    geoId: item.geoId,
+                    cases: item.cases,
+                    deaths: item.deaths,
+                    population: item.popData2019
+                });
+                total.population += item.popData2019;
+            }
+            total.cases += item.cases;
+            total.deaths += item.deaths;
+        }
+    }
+
+    return formattedData;
 }
 
 const getAmericaData = async () => {
@@ -23,7 +55,8 @@ const getAmericaData = async () => {
     await initialRequest.then(response => latestDate = new Date(Date.parse(response.data[0].max_submission_date)));
 
     const dataRequest = axios.get(CdcApi + `?submission_date=${latestDate.getFullYear()}-${latestDate.getMonth() + 1}-${latestDate.getDate()}`);
-    return dataRequest.then(response => {
+    let preData = [];
+    await dataRequest.then(response => {
         let data = response.data;
         let badStates = [];
         for (let item of data) {
@@ -35,9 +68,27 @@ const getAmericaData = async () => {
             const popObj = pops.find(i => i[1] === fullName);
             item.population = popObj[0];
         }
-        data = data.filter(item => !badStates.includes(item.state))
-        return data;
+        preData = data.filter(item => !badStates.includes(item.state))
     });
+
+    let formattedData = [{
+        name: "US",
+        cases: 0,
+        deaths: 0,
+        population: 0
+    }];
+    for (let item of preData) {
+        formattedData.push({
+            name: US[item.state],
+            cases: item.tot_cases,
+            deaths: item.tot_death,
+            population: item.population
+        });
+        formattedData[0].cases += Number(item.tot_cases);
+        formattedData[0].deaths += Number(item.tot_death);
+        formattedData[0].population += Number(item.population);
+    }
+    return formattedData
 }
 
 export default { getEuropeData, getAmericaData }
