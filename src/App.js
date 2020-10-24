@@ -6,7 +6,6 @@ import CounterTable from "./components/CounterTable";
 function App() {
     const [ americaData, setAmericaData ] = useState([]);
     const [ europeData, setEuropeData ] = useState([]);
-    const [ extend, setExtend ] = useState(false);
 
     useEffect (() => {
         covidService.getEuropeData().then(data => {
@@ -23,8 +22,7 @@ function App() {
             <div>Loading...</div>
             :
             <div>
-                <button onClick={() => setExtend(!extend)}>{extend ? "Hide" : "Extend"}</button>
-                <CounterTable europeData={europeData} americaData={americaData} extend={extend} />
+                <CounterTable europeData={europeData} americaData={americaData} />
             </div>
         }
     </div>

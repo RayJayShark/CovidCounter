@@ -1,7 +1,7 @@
 import React from 'react';
 import Counter from './Counter'
 
-const CounterTable = ({americaData, europeData, extend}) => {
+const CounterTable = ({americaData, europeData}) => {
 
     return (
         <div>
@@ -17,8 +17,8 @@ const CounterTable = ({americaData, europeData, extend}) => {
                         <th>Ratio (Deaths/Cases):</th>
                     </tr>
                 </thead>
-                <Counter data={europeData} extend={extend} />
-                <Counter data={americaData} extend={extend} />
+                <Counter data={europeData} />
+                <Counter data={americaData} />
             </table>
         </div>
     );
