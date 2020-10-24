@@ -13,21 +13,11 @@ const Counter = ({data, extend}) => {
 
 
     return (
-        <table className="counter">
-            { extend ?
-                <tbody>
-                    <tr>
-                        <td>Area:</td>
-                        <td>Cases:</td>
-                        <td>Deaths:</td>
-                        <td>Total Population:</td>
-                        <td>Ratio (Cases/Population):</td>
-                        <td>Ratio (Deaths/Population):</td>
-                        <td>Ratio (Deaths/Cases):</td>
-                    </tr>
+            extend ?
+                <tbody className="counter">
                     {data.map(country =>
                         <tr key={country.name}>
-                            <th>{country.name}:</th>
+                            <td>{country.name}:</td>
                             <td>{formatNumber(country.cases)}</td>
                             <td>{formatNumber(country.deaths)}</td>
                             <td>{formatNumber(country.population)}</td>
@@ -38,18 +28,9 @@ const Counter = ({data, extend}) => {
                     )}
                 </tbody>
                 :
-                <tbody>
+                <tbody className="counter">
                     <tr>
-                        <td>Area:</td>
-                        <td>Cases:</td>
-                        <td>Deaths:</td>
-                        <td>Total Population:</td>
-                        <td>Ratio (Cases/Population):</td>
-                        <td>Ratio (Deaths/Population):</td>
-                        <td>Ratio (Deaths/Cases):</td>
-                    </tr>
-                    <tr>
-                        <th>{data[0].name}:</th>
+                        <td>{data[0].name}:</td>
                         <td>{formatNumber(data[0].cases)}</td>
                         <td>{formatNumber(data[0].deaths)}</td>
                         <td>{formatNumber(data[0].population)}</td>
@@ -58,8 +39,6 @@ const Counter = ({data, extend}) => {
                         <td>{formatPercent(data[0].deaths / data[0].cases)}</td>
                     </tr>
                 </tbody>
-            }
-        </table>
     );
 }
 

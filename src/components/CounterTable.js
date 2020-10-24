@@ -6,14 +6,19 @@ const CounterTable = ({americaData, europeData, extend}) => {
     return (
         <div>
             <table>
-                <tbody>
-                    <tr>
-                        <td style={{verticalAlign: "top"}}><Counter data={europeData} extend={extend} /></td>
+                <thead>
+                    <tr style={{backgroundColor: '#c2c2c2'}}>
+                        <th>Area:</th>
+                        <th>Cases:</th>
+                        <th>Deaths:</th>
+                        <th>Total Population:</th>
+                        <th>Ratio (Cases/Population):</th>
+                        <th>Ratio (Deaths/Population):</th>
+                        <th>Ratio (Deaths/Cases):</th>
                     </tr>
-                    <tr>
-                        <td style={{verticalAlign: "top"}}><Counter data={americaData} extend={extend} /></td>
-                    </tr>
-                </tbody>
+                </thead>
+                <Counter data={europeData} extend={extend} />
+                <Counter data={americaData} extend={extend} />
             </table>
         </div>
     );
