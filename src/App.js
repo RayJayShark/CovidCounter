@@ -9,22 +9,22 @@ function App() {
 
     useEffect (() => {
         covidService.getEuropeData().then(data => {
-            setEuropeData(data);
+            setEuropeData([
+                data.shift(),
+                data
+            ]);
         });
         covidService.getAmericaData().then(data =>{
-            setAmericaData(data);
+            setAmericaData([
+                data.shift(),
+                data
+            ]);
         });
     }, []);
 
     return (
     <div>
-        {europeData.length === 0 || americaData.length === 0 ?
-            <div>Loading...</div>
-            :
-            <div>
-                <CounterTable europeData={europeData} americaData={americaData} />
-            </div>
-        }
+        <CounterTable allData={{US: americaData, EU: europeData}} />
     </div>
   );
 }

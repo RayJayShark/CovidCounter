@@ -29,9 +29,9 @@ const getEuropeData = async () => {
                 formattedData.push({
                     name: item.countriesAndTerritories,
                     geoId: item.geoId,
-                    cases: item.cases,
-                    deaths: item.deaths,
-                    population: item.popData2019
+                    cases: Number(item.cases),
+                    deaths: Number(item.deaths),
+                    population: Number(item.popData2019)
                 });
                 total.population += item.popData2019;
             }
@@ -80,9 +80,9 @@ const getAmericaData = async () => {
     for (let item of preData) {
         formattedData.push({
             name: US[item.state],
-            cases: item.tot_cases,
-            deaths: item.tot_death,
-            population: item.population
+            cases: Number(item.tot_cases),
+            deaths: Number(item.tot_death),
+            population: Number(item.population)
         });
         formattedData[0].cases += Number(item.tot_cases);
         formattedData[0].deaths += Number(item.tot_death);
