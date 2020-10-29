@@ -1,6 +1,5 @@
 import React from 'react';
 import DataTable from 'react-data-table-component';
-import './Counter.css';
 
 const Counter = ({data, tableData, columns}) => {
 
