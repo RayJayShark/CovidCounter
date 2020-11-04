@@ -1,30 +1,23 @@
-import React, {useState, useEffect} from 'react';
-import covidService from './services/covidapi'
+import React from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import CounterTable from "./components/CounterTable";
 import Timestamp from "./components/Timestamp";
+import Area from "./components/Area";
 
 function App() {
-    const [ americaData, setAmericaData ] = useState([]);
-    const [ europeData, setEuropeData ] = useState([]);
-
-    useEffect (() => {
-        covidService.getEuropeData().then(data => {
-            setEuropeData([
-                data.shift(),
-                data
-            ]);
-        });
-        covidService.getAmericaData().then(data =>{
-            setAmericaData([
-                data.shift(),
-                data
-            ]);
-        });
-    }, []);
 
     return (
     <div>
-        <CounterTable allData={{US: americaData, EU: europeData}} />
+        <BrowserRouter>
+            <Switch>
+                <Route path='/:country'>
+                    <Area />
+                </Route>
+                <Route path="/">
+                    <CounterTable />
+                </Route>
+            </Switch>
+        </BrowserRouter>
         <Timestamp />
     </div>
   );
