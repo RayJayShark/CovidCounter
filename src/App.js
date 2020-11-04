@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import covidService from './services/covidapi'
 import CounterTable from "./components/CounterTable";
+import Timestamp from "./components/Timestamp";
 
 function App() {
     const [ americaData, setAmericaData ] = useState([]);
@@ -24,6 +25,7 @@ function App() {
     return (
     <div>
         <CounterTable allData={{US: americaData, EU: europeData}} />
+        <Timestamp />
     </div>
   );
 }
