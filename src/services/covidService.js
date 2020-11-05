@@ -6,12 +6,15 @@ const EcdcApi = "https://opendata.ecdc.europa.eu/covid19/casedistribution/json";
 const CdcApi = "https://data.cdc.gov/resource/9mfq-cb36.json";
 const CensusApi = "https://api.census.gov/data/2010/dec/sf1?get=P001001,NAME&for=state";
 
-const getEuropeData = async () => {
-    const request = axios.get(proxy + EcdcApi);
-    let preData = [];
-    await request.then(response => preData = response.data.records);
 
-    const formattedData = [{
+
+const getEuropeData = async () => {
+    let preData = [];
+    await axios.get(proxy + EcdcApi).then(response => preData = response.data.records);
+
+    return preData.filter(item => EU.includes(item.geoId));
+
+    /*const formattedData = [{
         name: "EU",
         cases: 0,
         deaths: 0,
@@ -40,7 +43,7 @@ const getEuropeData = async () => {
         }
     }
 
-    return formattedData;
+    return formattedData;*/
 }
 
 const getAmericaData = async () => {
@@ -55,7 +58,7 @@ const getAmericaData = async () => {
     await initialRequest.then(response => latestDate = new Date(Date.parse(response.data[0].max_submission_date)));
 
     const dataRequest = axios.get(CdcApi + `?submission_date=${latestDate.getFullYear()}-${latestDate.getMonth() + 1}-${latestDate.getDate()}`);
-    let preData = [];
+    let filteredData = [];
     await dataRequest.then(response => {
         let data = response.data;
         let badStates = [];
@@ -68,9 +71,12 @@ const getAmericaData = async () => {
             const popObj = pops.find(i => i[1] === fullName);
             item.population = popObj[0];
         }
-        preData = data.filter(item => !badStates.includes(item.state))
+        filteredData = data.filter(item => !badStates.includes(item.state))
     });
 
+    return filteredData;
+
+    /*
     let formattedData = [{
         name: "US",
         cases: 0,
@@ -88,7 +94,7 @@ const getAmericaData = async () => {
         formattedData[0].deaths += Number(item.tot_death);
         formattedData[0].population += Number(item.population);
     }
-    return formattedData
+    return formattedData*/
 }
 
 export default { getEuropeData, getAmericaData }

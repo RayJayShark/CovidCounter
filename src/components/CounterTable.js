@@ -1,8 +1,61 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {useHistory} from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import Counter from './Counter'
-import covidService from "../services/covidapi";
+import {EU, US} from '../assets/countries.json'
+
+const formatEuropeData = (data) => {
+    const formattedData = [{
+        name: "EU",
+        cases: 0,
+        deaths: 0,
+        population: 0
+    }];
+    for (let item of data) {
+        if (EU.includes(item.geoId)) {
+            const total = formattedData[0];
+            const countryObj = formattedData.find(i => i.geoId === item.geoId);
+            if (countryObj){
+                countryObj.cases += item.cases;
+                countryObj.deaths += item.deaths;
+            }
+            else {
+                formattedData.push({
+                    name: item.countriesAndTerritories,
+                    geoId: item.geoId,
+                    cases: Number(item.cases),
+                    deaths: Number(item.deaths),
+                    population: Number(item.popData2019)
+                });
+                total.population += item.popData2019;
+            }
+            total.cases += item.cases;
+            total.deaths += item.deaths;
+        }
+    }
+    return formattedData;
+}
+
+const formatAmericaData = (data) => {
+    const formattedData = [{
+        name: "US",
+        cases: 0,
+        deaths: 0,
+        population: 0
+    }];
+    for (let item of data) {
+        formattedData.push({
+            name: US[item.state],
+            cases: Number(item.tot_cases),
+            deaths: Number(item.tot_death),
+            population: Number(item.population)
+        });
+        formattedData[0].cases += Number(item.tot_cases);
+        formattedData[0].deaths += Number(item.tot_death);
+        formattedData[0].population += Number(item.population);
+    }
+    return formattedData;
+}
 
 const formatNumber = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -53,27 +106,21 @@ const columns = [
     }
 ];
 
-const CounterTable = () => {
-    const [ americaData, setAmericaData ] = useState([]);
-    const [ europeData, setEuropeData ] = useState([]);
+const CounterTable = ({europeData, americaData}) => {
     const history = useHistory();
+    const formattedEuropeData = formatEuropeData(europeData);
+    const formattedAmericaData = formatAmericaData(americaData);
 
-    let allData = {US: americaData, EU: europeData};
-
-    useEffect (() => {
-        covidService.getEuropeData().then(data => {
-            setEuropeData([
-               data.shift(),
-               data
-            ]);
-        });
-        covidService.getAmericaData().then(data =>{
-            setAmericaData([
-                data.shift(),
-                data
-            ]);
-        });
-    }, []);
+    let allData = {
+        US: [
+            formattedAmericaData.shift(),
+            formattedAmericaData
+        ],
+        EU: [
+            formattedEuropeData.shift(),
+            formattedEuropeData
+        ]
+    };
 
     return (
        <DataTable
@@ -82,7 +129,7 @@ const CounterTable = () => {
             data={[allData.US[0], allData.EU[0]]}
             striped={true}
             theme="dark"
-            progressPending={allData.US.length === 0 || allData.EU.length === 0}
+            progressPending={allData.US.length === 1 || allData.EU.length === 1}
             expandableRows={true}
             expandableRowsComponent={<Counter tableData={allData} columns={columns} />}
             highlightOnHover={true}
