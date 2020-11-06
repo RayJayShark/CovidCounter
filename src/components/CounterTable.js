@@ -105,7 +105,7 @@ const CounterTable = ({europeData, americaData}) => {
             data={[allData.US[0], allData.EU[0]]}
             striped={true}
             theme="dark"
-            progressPending={allData.US.length === 1 || allData.EU.length === 1}
+            progressPending={allData.US[1].length === 0 || allData.EU[1].length === 0}
             expandableRows={true}
             expandableRowsComponent={<Counter tableData={allData} columns={columns} />}
             highlightOnHover={true}
