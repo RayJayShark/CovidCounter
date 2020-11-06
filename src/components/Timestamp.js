@@ -5,7 +5,7 @@ const currentTime = new Date();
 const Timestamp = () => {
 
     return (
-        <footer style={{color: '#FFFFFF'}}>Data retrieved: {currentTime.toDateString()} {currentTime.toTimeString()}</footer>
+        <footer style={{color: '#FFFFFF'}}><br/>Data retrieved: {currentTime.toDateString()} {currentTime.toTimeString()}</footer>
     );
 }
 
