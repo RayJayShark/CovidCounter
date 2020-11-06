@@ -1,21 +1,20 @@
 import React from 'react';
 import {useParams} from 'react-router-dom';
 
-const Territory = ({europeData, americaData}) => {
+const Territory = ({covidData}) => {
     const { territory } = useParams();
-    let exists = true;
-    const territoryData =
-        americaData.filter(item => item.name.toLowerCase() === territory.toLowerCase())
-        ??
-        europeData.filter(item => item.name.toLowerCase() === territory.toLowerCase());
+    let exists = false;
+    const territoryData = covidData.filter(item => item.name.toLowerCase() === territory.toLowerCase())
 
-    if (territoryData.length === 0)
-        exists = false;
+    if (territoryData.length > 0)
+        exists = true;
 
     return (
         <div style={{color: '#FFFFFF'}}>
             <h1>{territory}</h1>
-            <h3>Cases: {exists ? territoryData.reduce(((acc, cur) => acc + cur.cases), 0) : "Loading..."}</h3>
+            <strong>Cases:</strong> {exists ? territoryData.reduce(((acc, cur) => acc + cur.cases), 0) : "Loading..."}<br/>
+            <strong>Deaths:</strong> {exists ? territoryData.reduce(((acc, cur) => acc + cur.deaths), 0) : "Loading..."}<br/>
+            <strong>Population:</strong> {exists ? territoryData[0].population : "Loading..."}
         </div>
     )
 }

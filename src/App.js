@@ -19,7 +19,7 @@ function App() {
         <BrowserRouter>
             <Switch>
                 <Route path='/:territory'>
-                    <Territory europeData={europeData} americaData={americaData} />
+                    <Territory covidData={[...americaData, ...europeData]} />
                 </Route>
                 <Route path="/">
                     <CounterTable europeData={europeData} americaData={americaData} />
