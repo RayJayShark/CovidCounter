@@ -7,94 +7,67 @@ const CdcApi = "https://data.cdc.gov/resource/9mfq-cb36.json";
 const CensusApi = "https://api.census.gov/data/2010/dec/sf1?get=P001001,NAME&for=state";
 
 
-
 const getEuropeData = async () => {
     let preData = [];
     await axios.get(proxy + EcdcApi).then(response => preData = response.data.records);
 
-    return preData.filter(item => EU.includes(item.geoId));
+    /* Filters out countries not in the EU */
+    let filteredData = preData.filter(item => EU.includes(item.geoId));
 
-    /*const formattedData = [{
-        name: "EU",
-        cases: 0,
-        deaths: 0,
-        population: 0
-    }];
-    for (let item of preData) {
-        if (EU.includes(item.geoId)) {
-            const total = formattedData[0];
-            const countryObj = formattedData.find(i => i.geoId === item.geoId);
-            if (countryObj){
-                countryObj.cases += item.cases;
-                countryObj.deaths += item.deaths;
-            }
-            else {
-                formattedData.push({
-                    name: item.countriesAndTerritories,
-                    geoId: item.geoId,
-                    cases: Number(item.cases),
-                    deaths: Number(item.deaths),
-                    population: Number(item.popData2019)
-                });
-                total.population += item.popData2019;
-            }
-            total.cases += item.cases;
-            total.deaths += item.deaths;
+    /* Format data into uniform objects */
+    let formattedData = [];
+    for (let item of filteredData) {
+        const newObj = {
+            name: item.countriesAndTerritories,
+            geoId: item.geoId,
+            date: item.dateRep,
+            cases: Number(item.cases),
+            deaths: Number(item.deaths),
+            population: Number(item.popData2019)
         }
+        formattedData.push(newObj);
     }
-
-    return formattedData;*/
+    return formattedData;
 }
 
 const getAmericaData = async () => {
-    const initialRequest = axios.get(CdcApi + "?$select=max(submission_date)");
     const populationRequest = axios.get(CensusApi); // Request to Census API
     let pops = [];
-    let latestDate = {};
 
     await populationRequest.then(response => pops = response.data);
-    pops.shift()
+    pops.shift()    // First item of array, contains column names
 
-    await initialRequest.then(response => latestDate = new Date(Date.parse(response.data[0].max_submission_date)));
+    const dataRequest = await axios.get(CdcApi + "?$where=tot_cases>0&$limit=50000"); // Query for avoiding items with no cases and setting the max limit (50,000)
 
-    const dataRequest = axios.get(CdcApi + `?submission_date=${latestDate.getFullYear()}-${latestDate.getMonth() + 1}-${latestDate.getDate()}`);
-    let filteredData = [];
-    await dataRequest.then(response => {
-        let data = response.data;
-        let badStates = [];
-        for (let item of data) {
-            const fullName = US[item.state];
-            if (!fullName) {
-                badStates.push(item.state);
-                continue;
-            }
-            const popObj = pops.find(i => i[1] === fullName);
-            item.population = popObj[0];
+    /* Filters the US territories without population data */
+    let data = dataRequest.data;
+    let filteredData;
+    let badStates = [];
+    for (let item of data) {
+        const fullName = US[item.state];
+        if (!fullName) {
+            badStates.push(item.state);
+            continue;
         }
-        filteredData = data.filter(item => !badStates.includes(item.state))
-    });
-
-    return filteredData;
-
-    /*
-    let formattedData = [{
-        name: "US",
-        cases: 0,
-        deaths: 0,
-        population: 0
-    }];
-    for (let item of preData) {
-        formattedData.push({
-            name: US[item.state],
-            cases: Number(item.tot_cases),
-            deaths: Number(item.tot_death),
-            population: Number(item.population)
-        });
-        formattedData[0].cases += Number(item.tot_cases);
-        formattedData[0].deaths += Number(item.tot_death);
-        formattedData[0].population += Number(item.population);
+        const popObj = pops.find(i => i[1] === fullName);
+        item.population = popObj[0];
     }
-    return formattedData*/
+    filteredData = data.filter(item => !badStates.includes(item.state))
+
+    /* Formats data into uniform objects */
+    let formattedData = [];
+    for (let item of filteredData) {
+        const newObj = {
+            name: US[item.state],
+            geoId: item.state,
+            date: item.submission_date,
+            cases: Number(item.new_case),
+            deaths: Number(item.new_death),
+            population: Number(item.population)
+        }
+        formattedData.push(newObj);
+    }
+    return formattedData;
 }
 
 export default { getEuropeData, getAmericaData }

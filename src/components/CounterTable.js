@@ -2,57 +2,33 @@ import React from 'react';
 import {useHistory} from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import Counter from './Counter'
-import {EU, US} from '../assets/countries.json'
 
-const formatEuropeData = (data) => {
+const formatData = (region, data) => {
     const formattedData = [{
-        name: "EU",
+        name: region,
         cases: 0,
         deaths: 0,
         population: 0
     }];
     for (let item of data) {
-        if (EU.includes(item.geoId)) {
-            const total = formattedData[0];
-            const countryObj = formattedData.find(i => i.geoId === item.geoId);
-            if (countryObj){
-                countryObj.cases += item.cases;
-                countryObj.deaths += item.deaths;
-            }
-            else {
-                formattedData.push({
-                    name: item.countriesAndTerritories,
-                    geoId: item.geoId,
-                    cases: Number(item.cases),
-                    deaths: Number(item.deaths),
-                    population: Number(item.popData2019)
-                });
-                total.population += item.popData2019;
-            }
-            total.cases += item.cases;
-            total.deaths += item.deaths;
+        const total = formattedData[0];
+        const countryObj = formattedData.find(i => i.geoId === item.geoId);
+        if (countryObj){
+            countryObj.cases += item.cases;
+            countryObj.deaths += item.deaths;
         }
-    }
-    return formattedData;
-}
-
-const formatAmericaData = (data) => {
-    const formattedData = [{
-        name: "US",
-        cases: 0,
-        deaths: 0,
-        population: 0
-    }];
-    for (let item of data) {
-        formattedData.push({
-            name: US[item.state],
-            cases: Number(item.tot_cases),
-            deaths: Number(item.tot_death),
-            population: Number(item.population)
-        });
-        formattedData[0].cases += Number(item.tot_cases);
-        formattedData[0].deaths += Number(item.tot_death);
-        formattedData[0].population += Number(item.population);
+        else {
+            formattedData.push({
+                name: item.name,
+                geoId: item.geoId,
+                cases: item.cases,
+                deaths: item.deaths,
+                population: item.population
+            });
+            total.population += item.population;
+        }
+        total.cases += item.cases;
+        total.deaths += item.deaths;
     }
     return formattedData;
 }
@@ -108,8 +84,8 @@ const columns = [
 
 const CounterTable = ({europeData, americaData}) => {
     const history = useHistory();
-    const formattedEuropeData = formatEuropeData(europeData);
-    const formattedAmericaData = formatAmericaData(americaData);
+    const formattedEuropeData = formatData("EU", europeData);
+    const formattedAmericaData = formatData("US", americaData);
 
     let allData = {
         US: [
