@@ -1,11 +1,26 @@
 import React from 'react';
-
-const currentTime = new Date();
+import {useQueryCache} from "react-query";
 
 const Timestamp = () => {
 
+    const queryCache = useQueryCache();
+    const europeQuery = queryCache.getQuery('europe');
+    const americaQuery = queryCache.getQuery('america');
+    const latestTime = europeQuery.state.updatedAt > americaQuery.state.updatedAt ?
+        europeQuery.state.updatedAt
+        :
+        americaQuery.state.updatedAt;
+    const fetchTime = new Date(latestTime);
+
     return (
-        <footer style={{color: '#FFFFFF'}}><br/>Data retrieved: {currentTime.toDateString()} {currentTime.toTimeString()}</footer>
+        <footer style={{color: '#FFFFFF'}}>
+            <br/><>Date retrieved: </>
+            {europeQuery.state.isFetching ||  americaQuery.state.isFetching ?
+                '...'
+                :
+                fetchTime.toDateString() + ' ' + fetchTime.toTimeString()
+            }
+        </footer>
     );
 }
 
