@@ -1,11 +1,19 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import { useQuery } from 'react-query'
+import {QueryCache, ReactQueryCacheProvider, useQuery} from 'react-query'
 import { ReactQueryDevtools } from 'react-query-devtools'
 import CounterTable from "./components/CounterTable";
 import Timestamp from "./components/Timestamp";
 import Territory from "./components/Territory";
 import covidService from "./services/covidService";
+
+const queryCache = new QueryCache({
+    defaultConfig: {
+        queries: {
+            staleTime: 3600000
+        }
+    }
+});
 
 function App() {
 
@@ -14,18 +22,21 @@ function App() {
 
     return (
     <div>
-        <BrowserRouter>
-            <Switch>
-                <Route path='/:territory'>
-                    <Territory covidData={[...americaData ?? [], ...europeData ?? []]} />
-                </Route>
-                <Route path="/">
-                    <CounterTable europeData={europeData ?? []} americaData={americaData ?? []} />
-                </Route>
-            </Switch>
-        </BrowserRouter>
-        <Timestamp />
-        <ReactQueryDevtools initialIsOpen />
+        <ReactQueryCacheProvider queryCache={queryCache}>
+            <BrowserRouter>
+                <Switch>
+                    <Route path='/:territory'>
+                        <Territory covidData={[...americaData ?? [], ...europeData ?? []]} />
+                    </Route>
+                    <Route path="/">
+                        <CounterTable />
+                    </Route>
+                </Switch>
+            </BrowserRouter>
+            <Timestamp />
+            <ReactQueryDevtools initialIsOpen />
+        </ReactQueryCacheProvider>
+
     </div>
   );
 }

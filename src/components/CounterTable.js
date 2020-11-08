@@ -2,6 +2,8 @@ import React from 'react';
 import {useHistory} from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import Counter from './Counter'
+import {useQuery} from "react-query";
+import covidService from "../services/covidService";
 
 const formatData = (region, data) => {
     const formattedData = [{
@@ -82,8 +84,20 @@ const columns = [
     }
 ];
 
-const CounterTable = ({europeData, americaData}) => {
+const CounterTable = () => {
     const history = useHistory();
+
+    const { data: europeData, isFetching: europeFetching } = useQuery('europe', covidService.getEuropeData,
+        {
+            initialData: [],
+            initialStale: true
+        });
+    const { data: americaData, isFetching: americaFetching } = useQuery('america', covidService.getAmericaData,
+        {
+            initialData: [],
+            initialStale: true
+        });
+
     const formattedEuropeData = formatData("EU", europeData);
     const formattedAmericaData = formatData("US", americaData);
 
@@ -105,7 +119,7 @@ const CounterTable = ({europeData, americaData}) => {
             data={[allData.US[0], allData.EU[0]]}
             striped={true}
             theme="dark"
-            progressPending={allData.US[1].length === 0 || allData.EU[1].length === 0}
+            progressPending={europeFetching || americaFetching}
             expandableRows={true}
             expandableRowsComponent={<Counter tableData={allData} columns={columns} />}
             highlightOnHover={true}
