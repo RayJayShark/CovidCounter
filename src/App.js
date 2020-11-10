@@ -1,11 +1,10 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import {QueryCache, ReactQueryCacheProvider, useQuery} from 'react-query'
+import {QueryCache, ReactQueryCacheProvider} from 'react-query'
 import { ReactQueryDevtools } from 'react-query-devtools'
 import CounterTable from "./components/CounterTable";
 import Timestamp from "./components/Timestamp";
 import Territory from "./components/Territory";
-import covidService from "./services/covidService";
 
 const queryCache = new QueryCache({
     defaultConfig: {
@@ -17,8 +16,9 @@ const queryCache = new QueryCache({
 
 function App() {
 
-    const { data: europeData } = useQuery('europe', covidService.getEuropeData);
-    const { data: americaData } = useQuery('america', covidService.getAmericaData);
+    useEffect(() => {
+        document.title = "CovidCounter"
+    }, []);
 
     return (
     <div>
@@ -26,7 +26,7 @@ function App() {
             <BrowserRouter>
                 <Switch>
                     <Route path='/:territory'>
-                        <Territory covidData={[...americaData ?? [], ...europeData ?? []]} />
+                        <Territory />
                     </Route>
                     <Route path="/">
                         <CounterTable />

@@ -1,10 +1,14 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import {useQuery} from "react-query";
 import covidService from "../services/covidService";
 
-const Territory = ({covidData}) => {
+const Territory = () => {
     const { territory } = useParams();
+
+    useEffect(() => {
+        document.title = `CovidCounter: ${territory}`
+    });
 
     const { data: europeData, isLoading: europeLoading } = useQuery('europe', covidService.getEuropeData);
     const { data: americaData,isLoading: americaLoading } = useQuery('america', covidService.getAmericaData);
